@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11.625, 8.5" name="AGRO">
+  <DataContextMoniker Name="/AGRODataContext" />
+  <nestedChildShapes>
+    <classShape Id="70e7cc5d-5fbd-4c12-8c92-34f2c70181da" absoluteBounds="6.125, 2, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/AGRODataContext/Places" />
+      <nestedChildShapes>
+        <elementListCompartment Id="770c4dca-4716-4a3c-ba83-84f2e0155e96" absoluteBounds="6.1400000000000006, 2.46, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="765accea-9aec-4f59-b0f6-7993375d6577" absoluteBounds="6.25, 4.625, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/AGRODataContext/Inventory" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8f5ce476-d90b-4b8a-9a03-54b0131af34c" absoluteBounds="6.265, 5.085, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="fbbb1fa4-bd49-4498-9a28-fd624dc01b3c" absoluteBounds="3.125, 4, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/AGRODataContext/Animals" />
+      <nestedChildShapes>
+        <elementListCompartment Id="cb65b2c1-81de-450a-855b-ae596e942fb6" absoluteBounds="3.14, 4.46, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="fcb3850a-c8da-4e76-9224-a89b1bd567ac" absoluteBounds="3.125, 1.75, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/AGRODataContext/Cultures" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c461d78a-74cd-4c50-b1c6-bbc34556b1e5" absoluteBounds="3.1399999999999997, 2.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.125 : 2.66429768880208); (6.125 : 2.66429768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AGRODataContext/Cultures/Cultures_Places" />
+      <nodes>
+        <classShapeMoniker Id="fcb3850a-c8da-4e76-9224-a89b1bd567ac" />
+        <classShapeMoniker Id="70e7cc5d-5fbd-4c12-8c92-34f2c70181da" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.125 : 4.28125); (6.15625 : 4.28125); (6.15625 : 3.77089680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AGRODataContext/Animals/Animals_Places" />
+      <nodes>
+        <classShapeMoniker Id="fbbb1fa4-bd49-4498-9a28-fd624dc01b3c" />
+        <classShapeMoniker Id="70e7cc5d-5fbd-4c12-8c92-34f2c70181da" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="9fb09910-93b4-4971-a3dc-50e983c80dbc" absoluteBounds="9.375, 2.25, 2, 2.5401025390625">
+      <DataClassMoniker Name="/AGRODataContext/Workers" />
+      <nestedChildShapes>
+        <elementListCompartment Id="215210a1-ee51-4230-baa6-f35b114d58df" absoluteBounds="9.39, 2.71, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(8.125 : 3.01044840494792); (9.375 : 3.01044840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AGRODataContext/Places/Places_Workers" />
+      <nodes>
+        <classShapeMoniker Id="70e7cc5d-5fbd-4c12-8c92-34f2c70181da" />
+        <classShapeMoniker Id="9fb09910-93b4-4971-a3dc-50e983c80dbc" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.25 : 5.59300017447917); (10.375 : 5.59300017447917); (10.375 : 4.7901025390625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AGRODataContext/Inventory/Inventory_Workers" />
+      <nodes>
+        <classShapeMoniker Id="765accea-9aec-4f59-b0f6-7993375d6577" />
+        <classShapeMoniker Id="9fb09910-93b4-4971-a3dc-50e983c80dbc" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

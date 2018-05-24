@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DB_BOOKS" Class="AGRODataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\DB_BOOKS.mdf;Integrated Security=True;Connect Timeout=30" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DB_BOOKSConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Places" Member="Places">
+    <Type Name="Places">
+      <Column Name="IdP" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Pname" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+      <Column Name="MPrice" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PCulture" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PAnimals" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Places_Workers" Member="Workers" ThisKey="IdP" OtherKey="Place" Type="Workers" />
+      <Association Name="Cultures_Places" Member="Cultures" ThisKey="PCulture" OtherKey="IdC" Type="Cultures" IsForeignKey="true" />
+      <Association Name="Animals_Places" Member="Animals" ThisKey="PAnimals" OtherKey="IdA" Type="Animals" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Inventory" Member="Inventory">
+    <Type Name="Inventory">
+      <Column Name="IdI" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IName" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+      <Column Name="Count" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Price" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="MPrice" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Association Name="Inventory_Workers" Member="Workers" ThisKey="IdI" OtherKey="Inv" Type="Workers" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Animals" Member="Animals">
+    <Type Name="Animals">
+      <Column Name="IdA" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AName" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+      <Column Name="Count" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MarketPrice" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Association Name="Animals_Places" Member="Places" ThisKey="IdA" OtherKey="PAnimals" Type="Places" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Cultures" Member="Cultures">
+    <Type Name="Cultures">
+      <Column Name="IdC" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Cname" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+      <Column Name="MarketPrice" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Count" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Cultures_Places" Member="Places" ThisKey="IdC" OtherKey="PCulture" Type="Places" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Workers" Member="Workers">
+    <Type Name="Workers">
+      <Column Name="IdW" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FName" Type="System.String" DbType="NChar(20)" CanBeNull="true" />
+      <Column Name="SName" Type="System.String" DbType="NChar(20)" CanBeNull="true" />
+      <Column Name="TName" Type="System.String" DbType="NChar(20)" CanBeNull="true" />
+      <Column Name="Wage" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Inv" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Place" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Login" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="Password" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Association Name="Places_Workers" Member="Places" ThisKey="Place" OtherKey="IdP" Type="Places" IsForeignKey="true" />
+      <Association Name="Inventory_Workers" Member="Inventory" ThisKey="Inv" OtherKey="IdI" Type="Inventory" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
