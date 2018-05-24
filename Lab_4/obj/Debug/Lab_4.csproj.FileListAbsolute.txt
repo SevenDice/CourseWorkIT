@@ -23,3 +23,10 @@ D:\Misc\ИВТ\My 5.2\ИТ\Lab_5\Lab_4\obj\Debug\Lab_4.csproj.CoreCompileInputs.
 D:\Misc\ИВТ\My 5.2\ИТ\Lab_5\Lab_4\obj\Debug\Lab_4.dll
 D:\Misc\ИВТ\My 5.2\ИТ\Lab_5\Lab_4\obj\Debug\Lab_4.pdb
 D:\Misc\ИВТ\My 5.2\ИТ\Lab_5\Lab_4\obj\Debug\Lab_4.csprojAssemblyReference.cache
+D:\Misc\ИВТ\My 5.2\ИТ\CourseWorkIT\Lab_4\bin\Lab_4.dll.config
+D:\Misc\ИВТ\My 5.2\ИТ\CourseWorkIT\Lab_4\bin\Lab_4.dll
+D:\Misc\ИВТ\My 5.2\ИТ\CourseWorkIT\Lab_4\bin\Lab_4.pdb
+D:\Misc\ИВТ\My 5.2\ИТ\CourseWorkIT\Lab_4\obj\Debug\Lab_4.csprojAssemblyReference.cache
+D:\Misc\ИВТ\My 5.2\ИТ\CourseWorkIT\Lab_4\obj\Debug\Lab_4.csproj.CoreCompileInputs.cache
+D:\Misc\ИВТ\My 5.2\ИТ\CourseWorkIT\Lab_4\obj\Debug\Lab_4.dll
+D:\Misc\ИВТ\My 5.2\ИТ\CourseWorkIT\Lab_4\obj\Debug\Lab_4.pdb
