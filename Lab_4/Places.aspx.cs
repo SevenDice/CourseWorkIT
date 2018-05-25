@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -34,40 +35,37 @@ namespace Lab_4
 
     protected void Button1_Click(object sender, EventArgs e)
         {
-            AGRODataContext db = new AGRODataContext(Server.MapPath("\\"));
-
-            var mprice = double.TryParse(TextBox2.Text, out double _mprice)
-                ? _mprice
-                : (double?)null;
-
-            var pculture = int.TryParse(TextBox3.Text, out int _pculture)
-                ? _pculture
-                : (int?)null;
-
-            var panimals = int.TryParse(TextBox4.Text, out int _panimals)
-                ? _panimals
-                : (int?)null;
-
-
-            var a = new Places()
+            using (var db = new AGRODataContext(Server.MapPath("\\")))
             {
-                Pname = TextBox1.Text,
-                MPrice = mprice,
-                PCulture = pculture,
-                PAnimals = panimals                
-            };
+                var mprice = double.TryParse(TextBox2.Text, out double _mprice)
+                    ? _mprice
+                    : (double?) null;
 
-            db.Places.InsertOnSubmit(a);
-            db.SubmitChanges();
+                var pculture = db.Cultures.FirstOrDefault(c => c.Cname == TextBox3.Text.Trim())?.IdC;
+
+                var panimals = db.Animals.FirstOrDefault(a => a.AName == TextBox4.Text.Trim())?.IdA;
+
+                var place = new Places
+                {
+                    Pname = TextBox1.Text.Trim(),
+                    MPrice = mprice,
+                    PCulture = pculture,
+                    PAnimals = panimals
+                };
+
+                db.Places.InsertOnSubmit(place);
+                db.SubmitChanges();
+            }
         }
 
         protected void Button2_Click1(object sender, EventArgs e)
         {
-            AGRODataContext db = new AGRODataContext(Server.MapPath("\\"));
+            using (var db = new AGRODataContext(Server.MapPath("\\")))
+            {
+                var totals = db.Places.Sum(p => p.MPrice ?? 0);
 
-            var totals = (from w in db.Places select w.MPrice).Sum();
-
-            TextBox5.Text = totals.ToString();
+                TextBox5.Text = totals.ToString(CultureInfo.InvariantCulture);
+            }
         }
     }
 }
