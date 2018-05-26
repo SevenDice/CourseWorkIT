@@ -7,9 +7,16 @@ namespace Lab_4
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Auto.GetAuth().GetKey() == false)
+            if (!Auto.GetAuth().GetKey())
+            {
                 Nonauto();
-            Label2.Visible = false;
+                Label2.Visible = false;
+                LoginForm.Style.Add("display", "block");
+            }
+            else
+            {
+                LoginForm.Style.Add("display", "none");
+            }
         }
 
         protected void Nonauto()
@@ -23,33 +30,28 @@ namespace Lab_4
 
         protected void Button6_Click(object sender, EventArgs e)
         {
-            var log = TextBox1.Text.Trim();
-            var pwd = TextBox2.Text.Trim();
-
-            if (log != "" && pwd != "")
+            bool isAuth;
+            using (var db = new AGRODataContext(Server.MapPath("\\")))
             {
-                bool isAuth;
-                using (var db = new AGRODataContext(Server.MapPath("\\")))
-                {
-                    isAuth = db.Workers.Any(w => w.Login == log && w.Password == pwd);
-                }
+                isAuth = db.Workers.Any(w => w.Login == LoginTbx.Text && w.Password == PwdTbx.Text);
+            }
 
-                if (isAuth)
-                {
-                    Button1.Visible = true;
-                    Button2.Visible = true;
-                    Button3.Visible = true;
-                    Button4.Visible = true;
-                    Button5.Visible = true;
-                    Label2.Visible = false;
-                    Auto.GetAuth().SetKey(true);
-                }
-                else
-                {
-                    Label2.Visible = true;
-                    Nonauto();
-                    Auto.GetAuth().SetKey(false);
-                }
+            if (isAuth)
+            {
+                Button1.Visible = true;
+                Button2.Visible = true;
+                Button3.Visible = true;
+                Button4.Visible = true;
+                Button5.Visible = true;
+                Label2.Visible = false;
+                Auto.GetAuth().SetKey(true);
+                LoginForm.Style.Add("display", "none");
+            }
+            else
+            {
+                Label2.Visible = true;
+                Nonauto();
+                Auto.GetAuth().SetKey(false);
             }
         }
     }

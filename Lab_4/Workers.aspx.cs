@@ -74,7 +74,7 @@ namespace Lab_4
         {
             using (var db = new AGRODataContext(Server.MapPath("\\")))
             {
-                var wage = double.TryParse(TextBox2.Text, out double _wage)
+                var wage = double.TryParse(SalaryTbx.Text, out double _wage)
                     ? _wage
                     : (double?) null;
 
@@ -88,14 +88,14 @@ namespace Lab_4
 
                 var a = new Workers
                 {
-                    FName = TextBox6.Text,
-                    SName = TextBox5.Text,
-                    TName = TextBox1.Text,
+                    FName = LastNameTbx.Text,
+                    SName = FirstNameTbx.Text,
+                    TName = SurnameTbx.Text,
                     Wage = wage,
                     Inv = inv,
                     Place = place,
-                    Login = TextBox3.Text,
-                    Password = TextBox4.Text
+                    Login = LoginTbx.Text,
+                    Password = PwdTbx.Text
                 };
 
                 db.Workers.InsertOnSubmit(a);
@@ -117,7 +117,7 @@ namespace Lab_4
             using (var db = new AGRODataContext(Server.MapPath("\\")))
             {
                 var totals = db.Workers.Sum(w => w.Wage);
-                TextBox9.Text = totals.ToString();
+                TotalSalaryTbx.Text = totals.ToString();
             }
         }
 
@@ -233,8 +233,8 @@ namespace Lab_4
                         var selectedRow = WorkersTable.Rows[rowIdx];
 
                         var fNameCtl = selectedRow.Cells[2].Controls[0] as TextBox;
-                        var tNameCtl = selectedRow.Cells[3].Controls[0] as TextBox;
-                        var sNameCtl = selectedRow.Cells[4].Controls[0] as TextBox;
+                        var sNameCtl = selectedRow.Cells[3].Controls[0] as TextBox;
+                        var tNameCtl = selectedRow.Cells[4].Controls[0] as TextBox;
                         var wageCtl = selectedRow.Cells[5].Controls[0] as TextBox;
                         var invCtl = selectedRow.Cells[6].FindControl("InvEditor") as DropDownList;
                         var placeCtl = selectedRow.Cells[7].FindControl("PlaceEditor") as DropDownList;

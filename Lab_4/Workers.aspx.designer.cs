@@ -31,40 +31,40 @@ namespace Lab_4 {
         protected global::System.Web.UI.WebControls.GridView WorkersTable;
         
         /// <summary>
-        /// TextBox6 control.
+        /// LastNameTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox6;
+        protected global::System.Web.UI.WebControls.TextBox LastNameTbx;
         
         /// <summary>
-        /// TextBox1 control.
+        /// FirstNameTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox1;
+        protected global::System.Web.UI.WebControls.TextBox FirstNameTbx;
         
         /// <summary>
-        /// TextBox5 control.
+        /// SurnameTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox5;
+        protected global::System.Web.UI.WebControls.TextBox SurnameTbx;
         
         /// <summary>
-        /// TextBox2 control.
+        /// SalaryTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox2;
+        protected global::System.Web.UI.WebControls.TextBox SalaryTbx;
         
         /// <summary>
         /// InventaryDropDown control.
@@ -85,22 +85,22 @@ namespace Lab_4 {
         protected global::System.Web.UI.WebControls.DropDownList DepartmentDropDown;
         
         /// <summary>
-        /// TextBox3 control.
+        /// LoginTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox3;
+        protected global::System.Web.UI.WebControls.TextBox LoginTbx;
         
         /// <summary>
-        /// TextBox4 control.
+        /// PwdTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox4;
+        protected global::System.Web.UI.WebControls.TextBox PwdTbx;
         
         /// <summary>
         /// Button1 control.
@@ -112,13 +112,13 @@ namespace Lab_4 {
         protected global::System.Web.UI.WebControls.Button Button1;
         
         /// <summary>
-        /// TextBox9 control.
+        /// TotalSalaryTbx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox9;
+        protected global::System.Web.UI.WebControls.TextBox TotalSalaryTbx;
         
         /// <summary>
         /// Button3 control.
