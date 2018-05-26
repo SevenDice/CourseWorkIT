@@ -67,12 +67,12 @@
                     <tr>
                         <td>Имя:</td>
                         <td>
-                            <asp:TextBox ID="TextBox5" runat="server" Width="160px"></asp:TextBox></td>
+                            <asp:TextBox ID="TextBox1" runat="server" Width="160px"></asp:TextBox></td>
                     </tr>
                     <tr>
                         <td>Отчество:</td>
                         <td>
-                            <asp:TextBox ID="TextBox1" runat="server" Width="160px"></asp:TextBox></td>
+                            <asp:TextBox ID="TextBox5" runat="server" Width="160px"></asp:TextBox></td>
                     </tr>
                     <tr>
                         <td>Зарплата:</td>
