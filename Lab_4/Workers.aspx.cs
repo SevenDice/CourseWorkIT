@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Web.UI;
 using Lab_4.Infrastructure;
 
 namespace Lab_4
@@ -14,6 +16,57 @@ namespace Lab_4
             if (!IsPostBack)
             {
                 BindGrid();
+                BindInventory();
+                BindDepartment();
+            }
+        }
+
+        private void BindDepartment()
+        {
+                var source = GetDepartmentData();
+
+                DepartmentDropDown.DataSource = source;
+                DepartmentDropDown.DataTextField = "Text";
+                DepartmentDropDown.DataValueField = "Id";
+                DepartmentDropDown.DataBind();
+        }
+
+        protected List<DropDownData> GetDepartmentData()
+        {
+            using (var db = new AGRODataContext(Server.MapPath("\\")))
+            {
+                var source = db.Places.Select(i => new DropDownData
+                    {
+                        Id = i.IdP,
+                        Text = i.Pname
+                    })
+                    .ToList();
+
+                return source;
+            }
+        }
+
+        private void BindInventory()
+        {
+            var source = GetInventoryData();
+
+            InventaryDropDown.DataSource = source;
+            InventaryDropDown.DataTextField = "Text";
+            InventaryDropDown.DataValueField = "Id";
+            InventaryDropDown.DataBind();
+        }
+
+        protected List<DropDownData> GetInventoryData()
+        {
+            using (var db = new AGRODataContext(Server.MapPath("\\")))
+            {
+                var source = db.Inventory.Select(i => new DropDownData
+                    {
+                        Id = i.IdI,
+                        Text = i.IName
+                    })
+                    .ToList();
+                return source;
             }
         }
 
@@ -25,11 +78,13 @@ namespace Lab_4
                     ? _wage
                     : (double?) null;
 
-                var inv = int.TryParse(TextBox7.Text, out int _inv)
+                var inv = int.TryParse(InventaryDropDown.SelectedValue, out int _inv)
                     ? _inv
                     : (int?) null;
 
-                var place = db.Places.SingleOrDefault(p => p.Pname == TextBox8.Text)?.IdP;
+                var place = int.TryParse(DepartmentDropDown.SelectedValue, out int _place)
+                    ? _place
+                    : (int?)null;
 
                 var a = new Workers
                 {
@@ -71,7 +126,8 @@ namespace Lab_4
             using (var db = new AGRODataContext(Server.MapPath("\\")))
             {
                 IQueryable<WorkerAndPlace> query = db.Workers
-                    .Join(db.Places, w => w.Place, p => p.IdP, (w, p) => new WorkerAndPlace { Worker = w, Place = p });
+                    .Join(db.Places, w => w.Place, p => p.IdP, (w, p) => new WorkerAndPlace { Worker = w, Place = p })
+                    .Join(db.Inventory, wp => wp.Worker.Inv, i => i.IdI, (wp, i) => new WorkerAndPlace{Worker = wp.Worker, Place = wp.Place, Inventory = i});
 
                 switch (sortExpression)
                 {
@@ -88,7 +144,7 @@ namespace Lab_4
                         query = GetSortExpression(query, wp => wp.Worker.Wage, "Wage", isSort);
                         break;
                     case "Inv":
-                        query = GetSortExpression(query, wp => wp.Worker.Inv, "Inv", isSort);
+                        query = GetSortExpression(query, wp => wp.Inventory.IName, "Inv", isSort);
                         break;
                     case "Place":
                         query = GetSortExpression(query, wp => wp.Place.Pname, "Place", isSort);
@@ -113,8 +169,10 @@ namespace Lab_4
                         SName = x.Worker.SName,
                         TName = x.Worker.TName,
                         Wage = x.Worker.Wage,
-                        Inv = x.Worker.Inv,
+                        Inv = x.Inventory.IName,
+                        InvId = x.Inventory.IdI,
                         Place = x.Place.Pname,
+                        PlaceId = x.Place.IdP,
                         Login = x.Worker.Login,
                         Password = x.Worker.Password
                     })
@@ -178,8 +236,8 @@ namespace Lab_4
                         var tNameCtl = selectedRow.Cells[3].Controls[0] as TextBox;
                         var sNameCtl = selectedRow.Cells[4].Controls[0] as TextBox;
                         var wageCtl = selectedRow.Cells[5].Controls[0] as TextBox;
-                        var invCtl = selectedRow.Cells[6].Controls[0] as TextBox;
-                        var placeCtl = selectedRow.Cells[7].Controls[0] as TextBox;
+                        var invCtl = selectedRow.Cells[6].FindControl("InvEditor") as DropDownList;
+                        var placeCtl = selectedRow.Cells[7].FindControl("PlaceEditor") as DropDownList;
                         var loginCtl = selectedRow.Cells[8].Controls[0] as TextBox;
                         var pwdCtl = selectedRow.Cells[9].Controls[0] as TextBox;
 
@@ -187,12 +245,13 @@ namespace Lab_4
                         updatingEntity.TName = tNameCtl?.Text;
                         updatingEntity.SName = sNameCtl?.Text;
                         updatingEntity.Wage = int.TryParse(wageCtl?.Text, out int _wage) ? _wage : (int?) null;
-                        updatingEntity.Inv = int.TryParse(invCtl?.Text, out int _inv) ? _inv : (int?)null;
+                        updatingEntity.Inv = int.TryParse(invCtl?.SelectedValue, out int _inv) 
+                            ? _inv 
+                            : (int?)null;
 
-                        if (placeCtl?.Text != null)
-                        {
-                            updatingEntity.Place = db.Places.FirstOrDefault(p => p.Pname == placeCtl.Text)?.IdP;
-                        }
+                        updatingEntity.Place = int.TryParse(placeCtl?.SelectedValue, out int _place)
+                            ? _place 
+                            : (int?) null;
 
                         updatingEntity.Login = loginCtl?.Text;
                         updatingEntity.Password = pwdCtl?.Text;
