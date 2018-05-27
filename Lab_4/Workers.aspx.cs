@@ -314,7 +314,7 @@ namespace Lab_4
             return direction;
         }
 
-        IQueryable<WorkerAndPlace> GetSortExpression<T>(IQueryable<WorkerAndPlace> query, Expression<Func<WorkerAndPlace, T>> sortFunc, string column, bool isSort)
+        private IQueryable<WorkerAndPlace> GetSortExpression<T>(IQueryable<WorkerAndPlace> query, Expression<Func<WorkerAndPlace, T>> sortFunc, string column, bool isSort)
         {
             return GetSortDirection(column, isSort) == "asc"
                 ? query.OrderBy(sortFunc)
