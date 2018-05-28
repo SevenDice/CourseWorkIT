@@ -195,7 +195,7 @@ namespace Lab_4
             }
         }
 
-        protected void PlacesTable_RowUpdating(object sender, GridViewUpdateEventArgs e) //NEED FIX
+        protected void PlacesTable_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
             Debug.WriteLine("PlacesTable_RowUpdating");
 

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Web.UI.WebControls;
 
 namespace Lab_4
 {
@@ -121,6 +122,94 @@ namespace Lab_4
         {
             Debug.WriteLine("CulturesTable_Sorting");
             BindGrid(e.SortExpression, true);
+        }
+
+        protected void CulturesTable_RowEditing(object sender, System.Web.UI.WebControls.GridViewEditEventArgs e)
+        {
+            Debug.WriteLine("CulturesTable_RowEditing");
+            CulturesTable.EditIndex = e.NewEditIndex;
+            BindGrid();
+        }
+
+        protected void CulturesTable_RowUpdating(object sender, System.Web.UI.WebControls.GridViewUpdateEventArgs e)
+        {
+            Debug.WriteLine("CulturesTable_RowUpdating");
+
+            var rowIdx = e.RowIndex;
+
+            if (e.Keys.Contains("IdC"))
+            {
+                var updatingCultureId = (int)e.Keys["IdC"];
+                Debug.WriteLine($"updatingCulturesId = {updatingCultureId}");
+
+                using (var db = new AGRODataContext(Server.MapPath("\\")))
+                {
+                    var updatingEntity = db.Cultures.FirstOrDefault(p => p.IdC == updatingCultureId);
+
+                    if (updatingEntity != null)
+                    {
+                        var selectedRow = CulturesTable.Rows[rowIdx];
+
+                        var cNameCtl = selectedRow.Cells[2].Controls[0] as TextBox;
+                        var marketPriceCtl = selectedRow.Cells[3].Controls[0] as TextBox;
+                        var countCtl = selectedRow.Cells[4].Controls[0] as TextBox;
+                
+                        updatingEntity.Cname = cNameCtl?.Text;
+                        updatingEntity.MarketPrice = double.TryParse(marketPriceCtl?.Text, out double _marketPrice) ? _marketPrice : (double?)null;
+                        updatingEntity.Count = int.TryParse(countCtl?.Text, out int _count)
+                            ? _count
+                            : (int?)null;
+
+                        try
+                        {
+                            db.SubmitChanges();
+                            CulturesTable.EditIndex = -1;
+                            BindGrid();
+                        }
+                        catch (Exception exception)
+                        {
+                            Debug.WriteLine($"Somethig wrong: {exception.Message}");
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void CulturesTable_RowDeleting(object sender, System.Web.UI.WebControls.GridViewDeleteEventArgs e)
+        {
+            Debug.WriteLine("CulturesTable_RowDeleting");
+
+            if (e.Keys.Contains("IdС"))
+            {
+                var selectedCultureId = (int)e.Keys["IdС"];
+                Debug.WriteLine($"selectedCultureId = {selectedCultureId}");
+
+                using (var db = new AGRODataContext(Server.MapPath("\\")))
+                {
+                    var deletingEntity = db.Cultures.FirstOrDefault(p => p.IdC == selectedCultureId);
+
+                    if (deletingEntity != null)
+                    {
+                        db.Cultures.DeleteOnSubmit(deletingEntity);
+                        try
+                        {
+                            db.SubmitChanges();
+                            BindGrid();
+                        }
+                        catch (Exception exception)
+                        {
+                            Debug.WriteLine($"Somethig wrong: {exception.Message}");
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void CulturesTable_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            Debug.WriteLine("CulturesTable_RowCancelingEdit");
+            CulturesTable.EditIndex = -1;
+            BindGrid();
         }
     }
 
