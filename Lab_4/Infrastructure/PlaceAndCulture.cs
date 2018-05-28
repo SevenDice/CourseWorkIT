@@ -4,6 +4,6 @@
     {
         public Places Place { get; set; }
         public Cultures Culture { get; set; }
-        public Inventory Inventory { get; set; }
+        public Animals Animals { get; set; }
     }
 }

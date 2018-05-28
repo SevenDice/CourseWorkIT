@@ -17,28 +17,10 @@ namespace Lab_4
             if (!IsPostBack)
             {
                 BindGrid();
-                BindInventory();
                 BindCulture();
+                BindAnimals();
+                
             }
-            //AGRODataContext db = new AGRODataContext(Server.MapPath("\\"));
-            //var placesList =
-            //from p in db.Places
-            //join c in db.Cultures on p.PCulture equals c.IdC
-            //join a in db.Animals on p.PAnimals equals a.IdA
-            //orderby p.Pname
-            //select new
-            //{
-            //    IdP = p.IdP,
-            //    Pname = p.Pname,
-            //    MPrice = p.MPrice,
-            //    PCulture = c.Cname,
-            //    PAnimals = a.AName
-            //};
-
-            //var pList = placesList.ToList();
-
-            //PTable.DataSource = pList;
-            //PTable.DataBind();
         }
 
         private void BindCulture()
@@ -64,24 +46,24 @@ namespace Lab_4
             }
         }
 
-        private void BindInventory()
+        private void BindAnimals()
         {
-            var source = GetInventoryData();
+            var source = GetAnimalsData();
 
-            InventoryDropDown.DataSource = source;
-            InventoryDropDown.DataTextField = "Text";
-            InventoryDropDown.DataValueField = "Id";
-            InventoryDropDown.DataBind();
+            AnimalsDropDown.DataSource = source;
+            AnimalsDropDown.DataTextField = "Text";
+            AnimalsDropDown.DataValueField = "Id";
+            AnimalsDropDown.DataBind();
         }
 
-        protected List<DropDownData> GetInventoryData()
+        protected List<DropDownData> GetAnimalsData()
         {
             using (var db = new AGRODataContext(Server.MapPath("\\")))
             {
-                var source = db.Inventory.Select(i => new DropDownData
+                var source = db.Animals.Select(i => new DropDownData
                     {
-                        Id = i.IdI,
-                        Text = i.IName
+                        Id = i.IdA,
+                        Text = i.AName
                     })
                     .ToList();
                 return source;
@@ -92,20 +74,24 @@ namespace Lab_4
         {
             using (var db = new AGRODataContext(Server.MapPath("\\")))
             {
-                var mprice = double.TryParse(TextBox2.Text, out double _mprice)
-                    ? _mprice
+                var mPrice = double.TryParse(TextBox2.Text, out double _mPrice)
+                    ? _mPrice
                     : (double?) null;
 
-                var pculture = db.Cultures.FirstOrDefault(c => c.Cname == TextBox3.Text.Trim())?.IdC;
+                var pCulture = int.TryParse(CultureDropDown.SelectedValue, out int _pCulture)
+                    ? _pCulture
+                    : (int?)null;
 
-                var panimals = db.Animals.FirstOrDefault(a => a.AName == TextBox4.Text.Trim())?.IdA;
+                var pAnimals = int.TryParse(AnimalsDropDown.SelectedValue, out int _pAnimals)
+                    ? _pAnimals
+                    : (int?)null;
 
                 var place = new Places
                 {
                     Pname = TextBox1.Text.Trim(),
-                    MPrice = mprice,
-                    PCulture = pculture,
-                    PAnimals = panimals
+                    MPrice = mPrice,
+                    PCulture = pCulture,
+                    PAnimals = pAnimals
                 };
 
                 db.Places.InsertOnSubmit(place);
@@ -134,18 +120,14 @@ namespace Lab_4
             }
         }
 
-        public void BindGrid(string sortExpression = "", bool isSort = false) //NEED FIX
+        public void BindGrid(string sortExpression = "", bool isSort = false)
         {
             using (var db = new AGRODataContext(Server.MapPath("\\")))
             {
                 IQueryable<PlaceAndCulture> query = db.Places
-                    .Join(db.Cultures, c => c.Cultures, p => p.IdC, (p, c) => new PlaceAndCulture { Place = p, Culture = c })
-                    .Join(db.Inventory, pc => pc.Place.Inv, i => i.IdI, (pc, i) => new PlaceAndCulture { Place = pc.Place, Culture = pc.Place, Inventory = i });
-                //    IdP = p.IdP,
-                //    Pname = p.Pname,
-                //    MPrice = p.MPrice,
-                //    PCulture = c.Cname,
-                //    PAnimals = a.AName
+                    .Join(db.Cultures, p => p.PCulture, c => c.IdC, (p, c) => new PlaceAndCulture { Place = p, Culture = c })
+                    .Join(db.Animals, pc => pc.Place.PAnimals, a => a.IdA, (pc, a) => new PlaceAndCulture { Place = pc.Place, Culture = pc.Culture, Animals = a});
+
                 switch (sortExpression)
                 {
                     case "Pname":
@@ -173,7 +155,9 @@ namespace Lab_4
                         Pname = x.Place.Pname,
                         MPrice = x.Place.MPrice,
                         PCulture = x.Culture.Cname,
-                        PAnimals = x.Animals.AName
+                        PCultuteId = x.Culture.IdC,
+                        PAnimals = x.Animals.AName,
+                        PAnimalsId = x.Animals.IdA
                     })
                     .ToList();
 
@@ -216,7 +200,7 @@ namespace Lab_4
             Debug.WriteLine("PlacesTable_RowUpdating");
 
             var rowIdx = e.RowIndex;
-
+            
             if (e.Keys.Contains("IdP"))
             {
                 var updatingPlaceId = (int)e.Keys["IdP"];
@@ -230,29 +214,19 @@ namespace Lab_4
                     {
                         var selectedRow = PlacesTable.Rows[rowIdx];
 
-                        var fNameCtl = selectedRow.Cells[2].Controls[0] as TextBox;
-                        var sNameCtl = selectedRow.Cells[3].Controls[0] as TextBox;
-                        var tNameCtl = selectedRow.Cells[4].Controls[0] as TextBox;
-                        var wageCtl = selectedRow.Cells[5].Controls[0] as TextBox;
-                        var invCtl = selectedRow.Cells[6].FindControl("InvEditor") as DropDownList;
-                        var placeCtl = selectedRow.Cells[7].FindControl("PlaceEditor") as DropDownList;
-                        var loginCtl = selectedRow.Cells[8].Controls[0] as TextBox;
-                        var pwdCtl = selectedRow.Cells[9].Controls[0] as TextBox;
+                        var pNameCtl = selectedRow.Cells[2].Controls[0] as TextBox;
+                        var mPriceCtl = selectedRow.Cells[3].Controls[0] as TextBox;
+                        var cultureCtl = selectedRow.Cells[4].FindControl("CultureEditor") as DropDownList;
+                        var animalsCtl = selectedRow.Cells[5].FindControl("AnimalsEditor") as DropDownList;
 
-                        updatingEntity.FName = fNameCtl?.Text;
-                        updatingEntity.TName = tNameCtl?.Text;
-                        updatingEntity.SName = sNameCtl?.Text;
-                        updatingEntity.Wage = int.TryParse(wageCtl?.Text, out int _wage) ? _wage : (int?)null;
-                        updatingEntity.Inv = int.TryParse(invCtl?.SelectedValue, out int _inv)
-                            ? _inv
+                        updatingEntity.Pname = pNameCtl?.Text;
+                        updatingEntity.MPrice = int.TryParse(mPriceCtl?.Text, out int _mPrice) ? _mPrice : (int?) null;
+                        updatingEntity.PCulture = int.TryParse(cultureCtl?.SelectedValue, out int _pCulture)
+                            ? _pCulture 
                             : (int?)null;
-
-                        updatingEntity.Place = int.TryParse(placeCtl?.SelectedValue, out int _place)
-                            ? _place
+                        updatingEntity.PAnimals = int.TryParse(animalsCtl?.SelectedValue, out int _pAnimals)
+                            ? _pAnimals
                             : (int?)null;
-
-                        updatingEntity.Login = loginCtl?.Text;
-                        updatingEntity.Password = pwdCtl?.Text;
 
                         try
                         {

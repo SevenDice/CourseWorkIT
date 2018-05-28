@@ -1,5 +1,4 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Places.aspx.cs" Inherits="Lab_4.Places1" %>
-<%@ Import Namespace="System.Activities.Statements" %>
 
 <!DOCTYPE html>
 
@@ -29,36 +28,34 @@
                         <asp:BoundField DataField="IdP" HeaderText="IdP" InsertVisible="False" ReadOnly="True" SortExpression="IdP" Visible="False" />
                         <asp:BoundField DataField="Pname" HeaderText="Название отдела" SortExpression="Pname" />
                         <asp:BoundField DataField="MPrice" HeaderText="Цена обслуживания за месяц" SortExpression="MPrice" />
-                        <asp:BoundField DataField="PCulture" HeaderText="Возделываемая культура" SortExpression="PCulture" />
-                        <asp:BoundField DataField="PAnimals" HeaderText="Содержащиеся животные" SortExpression="PAnimals" />
-                        <asp:TemplateField HeaderText="Возделываемая культура" SortExpression="Cul">
-                            <ItemTemplate><%# Eval("Cul") %></ItemTemplate>
+                        <asp:TemplateField HeaderText="Возделываемая культура" SortExpression="PCulture">
+                            <ItemTemplate><%# Eval("PCulture") %></ItemTemplate>
                             <EditItemTemplate>
                                 <asp:DropDownList
-                                    ID="CulEditor"
+                                    ID="CultureEditor"
                                     DataSource='<%# GetCultureData() %>'
                                     DataTextField="Text"
                                     DataValueField="Id"
-                                    SelectedValue='<%# Eval("CulId") %>'
+                                    SelectedValue='<%# Eval("PCultuteId") %>'
                                     runat="server" />
                             </EditItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Содержащиеся животные" SortExpression="Animals">
-                            <ItemTemplate><%# Eval("Animals") %></ItemTemplate>
+                        <asp:TemplateField HeaderText="Содержащиеся животные" SortExpression="PAnimals">
+                            <ItemTemplate><%# Eval("PAnimals") %></ItemTemplate>
                             <EditItemTemplate>
                                 <asp:DropDownList
                                     ID="AnimalsEditor"
                                     DataSource='<%# GetAnimalsData() %>'
                                     DataTextField="Text"
                                     DataValueField="Id"
-                                    SelectedValue='<%# Eval("AnimalsId") %>'
+                                    SelectedValue='<%# Eval("PAnimalsId") %>'
                                     runat="server" />
                             </EditItemTemplate>
                         </asp:TemplateField>
                     </Columns>
                 </asp:GridView>
                 
-                <div class="floatableDiv" style="margin: 15px auto 10px; width: 800px">
+                <div class="floatableDiv" style="margin: 15px auto 10px; width: 900px">
                     <div style="float: left; margin-right: 15px; border: 1px black dashed;">
                         <table>
                         <tr>
@@ -75,13 +72,11 @@
                             <td>Возделываемая культура:</td>
                             <td>
                                 <asp:DropDownList ID="CultureDropDown" runat="server" /></td>
-                                <%--<asp:TextBox ID="TextBox3" runat="server" Width="160px"></asp:TextBox></td>--%>
                         </tr>
                         <tr>
                             <td>Содержащиеся животные:</td>
                             <td>
                                 <asp:DropDownList ID="AnimalsDropDown" runat="server" /></td>
-                                <%--<asp:TextBox ID="TextBox4" runat="server"></asp:TextBox></td>--%>
                         </tr>
                        
                         <tr>
