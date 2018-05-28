@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Linq.Expressions;
 
 namespace Lab_4
 {
@@ -11,29 +9,13 @@ namespace Lab_4
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            AGRODataContext db = new AGRODataContext(Server.MapPath("\\"));
-            var culturesList =
-            from c in db.Cultures
-            orderby c.Cname
-            select new
+            if (!IsPostBack)
             {
-                Idc = c.IdC,
-                Cname = c.Cname,
-                MarketPrice = c.MarketPrice,
-                Count = c.Count
-            };
+                BindGrid();
+            }
 
-            var cList = culturesList.ToList();
-
-            CTable.DataSource = cList;
-            CTable.DataBind();
         }
-        //<Columns>
-        //<asp:BoundField DataField = "IdC" HeaderText="IdC" InsertVisible="False" ReadOnly="True" SortExpression="IdC" Visible="False" />
-        //<asp:BoundField DataField = "Cname" HeaderText="Наименование культуры" SortExpression="Cname" />
-        //<asp:BoundField DataField = "MarketPrice" HeaderText="Цена за тонну" SortExpression="MarketPrice" />
-        //<asp:BoundField DataField = "Count" HeaderText="Количество" SortExpression="Count" />
-        //</Columns>
+  
         protected void Button1_Click(object sender, EventArgs e)
         {
             AGRODataContext db = new AGRODataContext(Server.MapPath("\\"));
@@ -46,7 +28,18 @@ namespace Lab_4
             };
 
             db.Cultures.InsertOnSubmit(a);
-            db.SubmitChanges();
+
+            try
+            {
+                db.SubmitChanges();
+                BindGrid();
+            }
+
+            catch (Exception exception)
+            {
+                Debug.WriteLine($"Something wrong: {exception.Message}");
+            }
+            
         }
 
         protected void Button2_Click(object sender, EventArgs e)
@@ -59,5 +52,76 @@ namespace Lab_4
 
             TextBox4.Text = totals.ToString();
         }
+
+        public void BindGrid(string sortExpression = "", bool isSort = false)
+        {
+            using (var db = new AGRODataContext(Server.MapPath("\\")))
+            {
+                IQueryable<Cultures> query = db.Cultures;
+
+                switch (sortExpression)
+                {
+                    case "IdC":
+                        query = GetSortExpression(query, c => c.IdC, "IdC", isSort);
+                        break;
+                    case "Cname":
+                        query = GetSortExpression(query, c => c.Cname, "Cname", isSort);
+                        break;
+                    case "MarketPrice":
+                        query = GetSortExpression(query, c => c.MarketPrice, "MarketPrice", isSort);
+                        break;
+                    case "Count":
+                        query = GetSortExpression(query, c => c.Count, "Count", isSort);
+                        break;
+                }
+
+                var source = query
+                    .Select(x => new
+                    {
+                        Idc = x.IdC,
+                        Cname = x.Cname,
+                        MarketPrice = x.MarketPrice,
+                        Count = x.Count
+                    })
+                    .ToList(); 
+                CulturesTable.DataSource = source;
+                CulturesTable.DataBind();
+            }
+        }
+
+        private string GetSortDirection(string column, bool isSort)
+        {
+            string direction = "asc";
+
+            if (!isSort)
+                return direction;
+
+            string previousColumnSorted = ViewState["SortColumn"]?.ToString() ?? "";
+
+            if (previousColumnSorted == column)
+                direction = ViewState["SortDirection"].ToString() == "asc"
+                    ? "desc"
+                    : "asc";
+            else
+                ViewState["SortColumn"] = column;
+
+            ViewState["SortDirection"] = direction;
+
+            return direction;
+        }
+
+        private IQueryable<Cultures> GetSortExpression<T>(IQueryable<Cultures> query, Expression<Func<Cultures, T>> sortFunc, string column, bool isSort)
+        {
+            return GetSortDirection(column, isSort) == "asc"
+                ? query.OrderBy(sortFunc)
+                : query.OrderByDescending(sortFunc);
+        }
+
+        protected void CulturesTable_Sorting(object sender, System.Web.UI.WebControls.GridViewSortEventArgs e)
+        {
+            Debug.WriteLine("CulturesTable_Sorting");
+            BindGrid(e.SortExpression, true);
+        }
     }
+
 }
