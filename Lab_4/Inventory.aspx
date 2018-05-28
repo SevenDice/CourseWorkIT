@@ -34,7 +34,7 @@
                     </Columns>
                 </asp:GridView>
                 
-                <div class="floatableDiv" style="margin: 15px auto 10px; width: 800px">
+                <div class="floatableDiv" style="margin: 15px auto 10px; width: 1000px">
                     <div style="float: left; margin-right: 15px; border: 1px black dashed;">
                         <table>
                         <tr>
