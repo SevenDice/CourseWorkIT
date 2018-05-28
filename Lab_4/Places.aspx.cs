@@ -134,7 +134,7 @@ namespace Lab_4
             }
         }
 
-        public void BindGrid(string sortExpression = "", bool isSort = false)
+        public void BindGrid(string sortExpression = "", bool isSort = false) //NEED FIX
         {
             using (var db = new AGRODataContext(Server.MapPath("\\")))
             {
@@ -211,7 +211,7 @@ namespace Lab_4
             }
         }
 
-        protected void PlacesTable_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        protected void PlacesTable_RowUpdating(object sender, GridViewUpdateEventArgs e) //NEED FIX
         {
             Debug.WriteLine("PlacesTable_RowUpdating");
 

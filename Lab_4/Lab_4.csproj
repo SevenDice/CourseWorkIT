@@ -110,6 +110,7 @@
       <DependentUpon>Cultures.aspx</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\DropDownData.cs" />
+    <Compile Include="Infrastructure\PlaceAndCulture.cs" />
     <Compile Include="Infrastructure\WorkerAndPlace.cs" />
     <Compile Include="Inventory.aspx.cs">
       <DependentUpon>Inventory.aspx</DependentUpon>
