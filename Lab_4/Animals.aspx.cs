@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Web.UI.WebControls;
 
 namespace Lab_4
 {
@@ -123,6 +124,94 @@ namespace Lab_4
         {
             Debug.WriteLine("AnimalsTable_Sorting");
             BindGrid(e.SortExpression, true);
+        }
+
+        protected void AnimalsTable_RowEditing(object sender, System.Web.UI.WebControls.GridViewEditEventArgs e)
+        {
+            Debug.WriteLine("AnimalsTable_RowEditing");
+            AnimalsTable.EditIndex = e.NewEditIndex;
+            BindGrid();
+        }
+
+        protected void AnimalsTable_RowUpdating(object sender, System.Web.UI.WebControls.GridViewUpdateEventArgs e)
+        {
+            Debug.WriteLine("AnimalsTable_RowUpdating");
+
+            var rowIdx = e.RowIndex;
+
+            if (e.Keys.Contains("IdA"))
+            {
+                var updatingWorkerId = (int)e.Keys["IdA"];
+                Debug.WriteLine($"updatingWorkerId = {updatingWorkerId}");
+
+                using (var db = new AGRODataContext(Server.MapPath("\\")))
+                {
+                    var updatingEntity = db.Animals.FirstOrDefault(a => a.IdA == updatingWorkerId);
+
+                    if (updatingEntity != null)
+                    {
+                        var selectedRow = AnimalsTable.Rows[rowIdx];
+
+                        var aNameCtl = selectedRow.Cells[2].Controls[0] as TextBox;
+                        var countCtl = selectedRow.Cells[3].Controls[0] as TextBox;
+                        var marketPriceCtl = selectedRow.Cells[4].Controls[0] as TextBox;
+
+                        updatingEntity.AName = aNameCtl?.Text;
+                        updatingEntity.Count = int.TryParse(countCtl?.Text, out int _count) ? _count : (int?)null;
+                        updatingEntity.MarketPrice = double.TryParse(marketPriceCtl?.Text, out double _marketPlace)
+                            ? _marketPlace
+                            : (double?)null;
+
+                        try
+                        {
+                            db.SubmitChanges();
+                            AnimalsTable.EditIndex = -1;
+                            BindGrid();
+                        }
+                        catch (Exception exception)
+                        {
+                            Debug.WriteLine($"Somethig wrong: {exception.Message}");
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void AnimalsTable_RowDeleting(object sender, System.Web.UI.WebControls.GridViewDeleteEventArgs e)
+        {
+            Debug.WriteLine("AnimalsTable_RowDeleting");
+
+            if (e.Keys.Contains("IdA"))
+            {
+                var selectedWorkerId = (int)e.Keys["IdA"];
+                Debug.WriteLine($"selectedWorkerId = {selectedWorkerId}");
+
+                using (var db = new AGRODataContext(Server.MapPath("\\")))
+                {
+                    var deletingEntity = db.Animals.FirstOrDefault(a => a.IdA == selectedWorkerId);
+
+                    if (deletingEntity != null)
+                    {
+                        db.Animals.DeleteOnSubmit(deletingEntity);
+                        try
+                        {
+                            db.SubmitChanges();
+                            BindGrid();
+                        }
+                        catch (Exception exception)
+                        {
+                            Debug.WriteLine($"Somethig wrong: {exception.Message}");
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void AnimalsTable_RowCancelingEdit(object sender, System.Web.UI.WebControls.GridViewCancelEditEventArgs e)
+        {
+            Debug.WriteLine("AnimalsTable_RowCancelingEdit");
+            AnimalsTable.EditIndex = -1;
+            BindGrid();
         }
     }
 }
