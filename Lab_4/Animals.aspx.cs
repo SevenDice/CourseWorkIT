@@ -141,12 +141,12 @@ namespace Lab_4
 
             if (e.Keys.Contains("IdA"))
             {
-                var updatingWorkerId = (int)e.Keys["IdA"];
-                Debug.WriteLine($"updatingWorkerId = {updatingWorkerId}");
+                var updatingAnimalId = (int)e.Keys["IdA"];
+                Debug.WriteLine($"updatingAnimalId = {updatingAnimalId}");
 
                 using (var db = new AGRODataContext(Server.MapPath("\\")))
                 {
-                    var updatingEntity = db.Animals.FirstOrDefault(a => a.IdA == updatingWorkerId);
+                    var updatingEntity = db.Animals.FirstOrDefault(a => a.IdA == updatingAnimalId);
 
                     if (updatingEntity != null)
                     {
@@ -158,8 +158,8 @@ namespace Lab_4
 
                         updatingEntity.AName = aNameCtl?.Text;
                         updatingEntity.Count = int.TryParse(countCtl?.Text, out int _count) ? _count : (int?)null;
-                        updatingEntity.MarketPrice = double.TryParse(marketPriceCtl?.Text, out double _marketPlace)
-                            ? _marketPlace
+                        updatingEntity.MarketPrice = double.TryParse(marketPriceCtl?.Text, out double _marketPrice)
+                            ? _marketPrice
                             : (double?)null;
 
                         try
@@ -183,12 +183,12 @@ namespace Lab_4
 
             if (e.Keys.Contains("IdA"))
             {
-                var selectedWorkerId = (int)e.Keys["IdA"];
-                Debug.WriteLine($"selectedWorkerId = {selectedWorkerId}");
+                var selectedAnimalId = (int)e.Keys["IdA"];
+                Debug.WriteLine($"selectedAnimalId = {selectedAnimalId}");
 
                 using (var db = new AGRODataContext(Server.MapPath("\\")))
                 {
-                    var deletingEntity = db.Animals.FirstOrDefault(a => a.IdA == selectedWorkerId);
+                    var deletingEntity = db.Animals.FirstOrDefault(a => a.IdA == selectedAnimalId);
 
                     if (deletingEntity != null)
                     {

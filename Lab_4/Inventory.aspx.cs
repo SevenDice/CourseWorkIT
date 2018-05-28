@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Linq;
-
+using System.Web.UI.WebControls;
 
 
 namespace Lab_4
@@ -134,8 +134,96 @@ namespace Lab_4
             BindGrid(e.SortExpression, true);
         }
 
+        protected void InventoryTable_RowCancelingEdit(object sender, System.Web.UI.WebControls.GridViewCancelEditEventArgs e)
+        {
+            Debug.WriteLine("InventoryTable_RowCancelingEdit");
+            InventoryTable.EditIndex = -1;
+            BindGrid();
+        }
+
+        protected void InventoryTable_RowDeleting(object sender, System.Web.UI.WebControls.GridViewDeleteEventArgs e)
+        {
+            Debug.WriteLine("InventoryTable_RowDeleting");
+
+            if (e.Keys.Contains("IdI"))
+            {
+                var selectedInventoryId = (int)e.Keys["IdI"];
+                Debug.WriteLine($"selectedInventoryId = {selectedInventoryId}");
+
+                using (var db = new AGRODataContext(Server.MapPath("\\")))
+                {
+                    var deletingEntity = db.Inventory.FirstOrDefault(i => i.IdI == selectedInventoryId);
+
+                    if (deletingEntity != null)
+                    {
+                        db.Inventory.DeleteOnSubmit(deletingEntity);
+                        try
+                        {
+                            db.SubmitChanges();
+                            BindGrid();
+                        }
+                        catch (Exception exception)
+                        {
+                            Debug.WriteLine($"Somethig wrong: {exception.Message}");
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void InventoryTable_RowUpdating(object sender, System.Web.UI.WebControls.GridViewUpdateEventArgs e)
+        {
+            Debug.WriteLine("InventoryTable_RowUpdating");
+
+            var rowIdx = e.RowIndex;
+
+            if (e.Keys.Contains("IdI"))
+            {
+                var updatingInventoryId = (int)e.Keys["IdI"];
+                Debug.WriteLine($"updatingInventoryId = {updatingInventoryId}");
+
+                using (var db = new AGRODataContext(Server.MapPath("\\")))
+                {
+                    var updatingEntity = db.Inventory.FirstOrDefault(i => i.IdI == updatingInventoryId);
+
+                    if (updatingEntity != null)
+                    {
+                        var selectedRow = InventoryTable.Rows[rowIdx];
+
+                        var iNameCtl = selectedRow.Cells[2].Controls[0] as TextBox;
+                        var countCtl = selectedRow.Cells[3].Controls[0] as TextBox;
+                        var priceCtl = selectedRow.Cells[4].Controls[0] as TextBox;
+                        var mPriceCtl = selectedRow.Cells[5].Controls[0] as TextBox;
+
+                        updatingEntity.IName = iNameCtl?.Text;
+                        updatingEntity.Count = int.TryParse(countCtl?.Text, out int _count) ? _count : (int?)null;
+                        updatingEntity.Price = double.TryParse(priceCtl?.Text, out double _price)
+                            ? _price
+                            : (double?)null;
+                        updatingEntity.MPrice = double.TryParse(mPriceCtl?.Text, out double _mPrice)
+                            ? _mPrice
+                            : (double?)null;
+
+                        try
+                        {
+                            db.SubmitChanges();
+                            InventoryTable.EditIndex = -1;
+                            BindGrid();
+                        }
+                        catch (Exception exception)
+                        {
+                            Debug.WriteLine($"Somethig wrong: {exception.Message}");
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void InventoryTable_RowEditing(object sender, System.Web.UI.WebControls.GridViewEditEventArgs e)
+        {
+            Debug.WriteLine("InventoryTable_RowEditing");
+            InventoryTable.EditIndex = e.NewEditIndex;
+            BindGrid();
+        }
     }
-
 }
-
-   
