@@ -2,8 +2,8 @@
 {
     public class PlaceAndCulture
     {
-        public Workers Place { get; set; }
-        public Places Culture { get; set; }
+        public Places Place { get; set; }
+        public Cultures Culture { get; set; }
         public Inventory Inventory { get; set; }
     }
 }
